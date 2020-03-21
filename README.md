@@ -4,6 +4,6 @@ Color scheme is [morhetz/gruvbox](https://github.com/morhetz/gruvbox).
 
 There's still lots of work to do!
 
-[LICENSE_MIT](MIT Licensed).
+[MIT Licensed](LICENSE_MIT).
 
 [README-template.md](README-template.md) has the original README that comes with the template repo.
