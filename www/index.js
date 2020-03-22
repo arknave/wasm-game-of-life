@@ -37,9 +37,15 @@ const drawGrid = () => {
     ctx.stroke();
 }
 
+const accessCell = (cells, idx) => {
+    const cellIdx = idx >> 3;
+    const mask = 1 << (idx & 0x7);
+    return (cells[cellIdx] & mask) > 0;
+}
+
 const drawCells = () => {
     const cellsPtr = universe.cells();
-    const cells = new Uint8Array(memory.buffer, cellsPtr, width * height);
+    const cells = new Uint8Array(memory.buffer, cellsPtr, width * height / 8);
 
     ctx.beginPath();
 
@@ -47,7 +53,7 @@ const drawCells = () => {
         for (let col = 0; col < width; col++) {
             const idx = getIndex(row, col);
 
-            ctx.fillStyle = cells[idx] == Cell.Dead ? DEAD_COLOR : ALIVE_COLOR;
+            ctx.fillStyle = accessCell(cells, idx) ? DEAD_COLOR : ALIVE_COLOR;
 
             // (x, y, w, h)
             ctx.fillRect(
