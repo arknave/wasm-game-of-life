@@ -20,6 +20,7 @@ pub struct Universe {
     cells: FixedBitSet,
 }
 
+/// Private methods for use by both Rust and JS
 impl Universe {
     fn get_index(&self, row: u32, col: u32) -> usize {
         (row * self.width + col) as usize
@@ -41,6 +42,27 @@ impl Universe {
         }
 
         count
+    }
+
+    fn reset_cells(&mut self) {
+        let total_cells = (self.width * self.height) as usize;
+        self.cells.grow(total_cells);
+        self.cells.clear();
+    }
+}
+
+/// Public methods for Rust only (testing)
+impl Universe {
+    pub fn get_cells(&self) -> &FixedBitSet {
+        &self.cells
+    }
+
+    pub fn set_cells(&mut self, cells: &[(u32, u32)]) {
+        self.cells.clear();
+        for (row, col) in cells.iter().cloned() {
+            let idx = self.get_index(row, col);
+            self.cells.put(idx);
+        }
     }
 }
 
@@ -83,8 +105,8 @@ impl Universe {
         let mut cells = FixedBitSet::with_capacity(total_cells);
 
         for idx in (0 as usize)..total_cells {
-            // let rand = js_sys::Math::random();
-            cells.set(idx, idx % 2 == 0 || idx % 7 == 0);
+            let rand = js_sys::Math::random();
+            cells.set(idx, rand < 0.5);
         }
 
         Universe {
@@ -94,9 +116,6 @@ impl Universe {
         }
     }
 
-    // .#.
-    // ..#
-    // ###
     pub fn init_spaceship(&mut self) {
         for (r, c) in [(0, 1), (1, 2), (2, 0), (2, 1), (2, 2)].iter().cloned() {
             let idx = self.get_index(r, c);
@@ -108,8 +127,18 @@ impl Universe {
         self.width
     }
 
+    pub fn set_width(&mut self, width: u32) {
+        self.width = width;
+        self.reset_cells();
+    }
+
     pub fn height(&self) -> u32 {
         self.height
+    }
+
+    pub fn set_height(&mut self, height: u32) {
+        self.height = height;
+        self.reset_cells();
     }
 
     pub fn cells(&self) -> *const u32 {
