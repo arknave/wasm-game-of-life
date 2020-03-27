@@ -7,6 +7,7 @@ const DEAD_COLOR = "#282828";
 const ALIVE_COLOR = "#FBF1C7";
 
 const universe = Universe.new();
+universe.random_cells();
 const width = universe.width();
 const height = universe.height();
 
@@ -123,9 +124,16 @@ playPauseButton.addEventListener("click", event => {
     }
 });
 
+const randomButton = document.getElementById("random-board");
+randomButton.addEventListener("click", event => {
+    universe.random_cells();
+    drawGrid();
+    drawCells();
+});
+
 const resetButton = document.getElementById("clear-board");
 resetButton.addEventListener("click", event => {
-    universe.clear_cells();
+    universe.reset_cells();
     drawGrid();
     drawCells();
 });

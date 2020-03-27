@@ -27,7 +27,7 @@ pub struct Universe {
     cells: FixedBitSet,
 }
 
-/// Private methods for use by both Rust and JS
+/// Private methods for Rust
 impl Universe {
     fn get_index(&self, row: u32, col: u32) -> usize {
         (row * self.width + col) as usize
@@ -51,10 +51,8 @@ impl Universe {
         count
     }
 
-    fn reset_cells(&mut self) {
-        let total_cells = (self.width * self.height) as usize;
-        self.cells.grow(total_cells);
-        self.cells.clear();
+    fn total_cells(&self) -> usize {
+        (self.width * self.height) as usize
     }
 }
 
@@ -128,12 +126,7 @@ impl Universe {
         let width: u32 = 64;
         let height: u32 = 64;
         let total_cells = (width * height) as usize;
-        let mut cells = FixedBitSet::with_capacity(total_cells);
-
-        for idx in (0 as usize)..total_cells {
-            let rand = js_sys::Math::random();
-            cells.set(idx, rand < 0.5);
-        }
+        let cells = FixedBitSet::with_capacity(total_cells);
 
         Universe {
             width,
@@ -180,7 +173,15 @@ impl Universe {
         self.cells.toggle(idx);
     }
 
-    pub fn clear_cells(&mut self) {
+    pub fn random_cells(&mut self) {
+        for idx in (0 as usize)..self.total_cells() {
+            let rand = js_sys::Math::random();
+            self.cells.set(idx, rand < 0.5);
+        }
+    }
+
+    pub fn reset_cells(&mut self) {
+        self.cells.grow(self.total_cells());
         self.cells.clear();
     }
 }
