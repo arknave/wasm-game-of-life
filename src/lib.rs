@@ -6,6 +6,13 @@ extern crate fixedbitset;
 use fixedbitset::FixedBitSet;
 
 extern crate js_sys;
+extern crate web_sys;
+
+macro_rules! log {
+    ( $( $t:tt )* ) => {
+        web_sys::console::log_1(&format!( $( $t )* ).into());
+    }
+}
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -78,6 +85,16 @@ impl Universe {
                 let cell = self.cells[idx];
                 let live_neighbors = self.live_neighbor_count(row, col);
 
+                /*
+                log!(
+                    "cell({}, {}) was {} and has {} live neighbors!",
+                    row,
+                    col,
+                    cell,
+                    live_neighbors,
+                );
+                */
+
                 let next_cell = match (cell, live_neighbors) {
                     // lack of resources
                     (true, x) if x < 2 => false,
@@ -91,6 +108,13 @@ impl Universe {
                     (otherwise, _) => otherwise, 
                 };
 
+                /*
+                log!(
+                    "cell is now {}",
+                    next_cell,
+                );
+                */
+
                 next.set(idx, next_cell)
             }
         }
@@ -99,7 +123,7 @@ impl Universe {
     }
 
     pub fn new() -> Universe {
-        // utils::set_panic_hook();
+        utils::set_panic_hook();
 
         let width: u32 = 64;
         let height: u32 = 64;
