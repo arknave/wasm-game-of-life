@@ -105,21 +105,29 @@ const isPaused = () => {
 }
 
 const play = () => {
-    playPauseButton.textContent = "⏸";
+    playPauseButton.textContent = "Pause";
     renderLoop();
 }
 
 const pause = () => {
-    playPauseButton.textContent = "▶";
+    playPauseButton.textContent = "Play";
     cancelAnimationFrame(animationId);
     animationId = null;
 }
 
 playPauseButton.addEventListener("click", event => {
-    if (isPaused())
+    if (isPaused()) {
         play();
-    else
+    } else {
         pause();
+    }
+});
+
+const resetButton = document.getElementById("clear-board");
+resetButton.addEventListener("click", event => {
+    universe.clear_cells();
+    drawGrid();
+    drawCells();
 });
 
 const renderLoop = () => {

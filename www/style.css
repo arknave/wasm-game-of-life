@@ -11,6 +11,17 @@ body {
     justify-content: center;
 }
 
-div#canvas-container {
+.canvas-container {
     border: 2.5px solid #98971A;
+}
+
+.button-header {
+    background-color: #665c54;
+    border: 2px solid #d79921;
+    width: 80%;
+    margin: 2% 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
