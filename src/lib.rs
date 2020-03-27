@@ -99,6 +99,8 @@ impl Universe {
     }
 
     pub fn new() -> Universe {
+        // utils::set_panic_hook();
+
         let width: u32 = 64;
         let height: u32 = 64;
         let total_cells = (width * height) as usize;
