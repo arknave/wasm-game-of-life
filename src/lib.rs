@@ -174,4 +174,9 @@ impl Universe {
     pub fn get_alive_cells(&self) -> Vec<usize> {
         self.cells.ones().collect()
     }
+
+    pub fn toggle_cell(&mut self, row: u32, col: u32) {
+        let idx = self.get_index(row, col);
+        self.cells.toggle(idx);
+    }
 }

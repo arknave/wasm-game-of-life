@@ -12,6 +12,8 @@ const height = universe.height();
 
 const getIndex = (row, col) => row * width + col;
 
+// drawing
+
 const canvas = document.getElementById("game-of-life-canvas");
 canvas.width = (CELL_SIZE + 1) * width + 1;
 canvas.height = (CELL_SIZE + 1) * height + 1;
@@ -67,6 +69,30 @@ const drawCells = () => {
 
     ctx.stroke();
 }
+
+// canvas interaction
+
+const clamp = (x, lo, hi) => {
+    return Math.min(Math.max(lo, x), hi);
+}
+
+canvas.addEventListener("click", event => {
+    const boundingRect = canvas.getBoundingClientRect();
+
+    const scaleX = canvas.width / boundingRect.width;
+    const scaleY = canvas.height / boundingRect.height;
+
+    const canvasLeft = (event.clientX - boundingRect.left) * scaleX;
+    const canvasTop = (event.clientY - boundingRect.top) * scaleY;
+
+    const row = clamp(Math.floor(canvasTop / (CELL_SIZE + 1)), 0, height - 1);
+    const col = clamp(Math.floor(canvasLeft / (CELL_SIZE + 1)), 0, width - 1);
+
+    universe.toggle_cell(row, col);
+
+    drawGrid();
+    drawCells();
+});
 
 // Handle game playing
 
