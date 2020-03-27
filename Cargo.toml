@@ -22,6 +22,12 @@ wasm-bindgen = "0.2"
 # code size when deploying.
 console_error_panic_hook = { version = "0.1.1", optional = true }
 
+[dependencies.web-sys]
+version = "0.3"
+features = [
+    "console",
+]
+
 # `wee_alloc` is a tiny allocator for wasm that is only ~1K in code size
 # compared to the default allocator's ~10K. It is slower than the default
 # allocator, however.
@@ -36,8 +42,3 @@ wasm-bindgen-test = "0.2"
 # Tell `rustc` to optimize for small code size.
 opt-level = "s"
 
-[dependencies.web-sys]
-version = "0.3"
-features = [
-    "console",
-]
