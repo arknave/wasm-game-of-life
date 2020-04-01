@@ -71,6 +71,11 @@ const drawCells = () => {
     ctx.stroke();
 }
 
+const draw = () => {
+    drawGrid();
+    drawCells();
+}
+
 // canvas interaction
 
 const clamp = (x, lo, hi) => {
@@ -91,8 +96,7 @@ canvas.addEventListener("click", event => {
 
     universe.toggle_cell(row, col);
 
-    drawGrid();
-    drawCells();
+    draw();
 });
 
 // Handle game playing
@@ -127,22 +131,31 @@ playPauseButton.addEventListener("click", event => {
 const randomButton = document.getElementById("random-board");
 randomButton.addEventListener("click", event => {
     universe.random_cells();
-    drawGrid();
-    drawCells();
+    draw();
 });
 
 const resetButton = document.getElementById("clear-board");
 resetButton.addEventListener("click", event => {
     universe.reset_cells();
-    drawGrid();
-    drawCells();
+    draw();
+});
+
+let tickCount = 0;
+
+let frameSkip = 1;
+const frameSkipSlider = document.getElementById("frame-skip");
+frameSkipSlider.addEventListener("input", event => {
+    frameSkip = event.target.value;
 });
 
 const renderLoop = () => {
-    universe.tick();
+    tickCount++;
+    if (tickCount >= frameSkip) {
+        universe.tick();
+        tickCount = 0;
+    }
 
-    drawGrid();
-    drawCells();
+    draw();
 
     animationId = requestAnimationFrame(renderLoop);
 }
