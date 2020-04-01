@@ -94,8 +94,10 @@ canvas.addEventListener("click", event => {
     const row = clamp(Math.floor(canvasTop / (CELL_SIZE + 1)), 0, height - 1);
     const col = clamp(Math.floor(canvasLeft / (CELL_SIZE + 1)), 0, width - 1);
 
-    if (event.metaKey) {
+    if (event.metaKey || event.ctrlKey) {
         universe.add_spaceship(row, col);
+    } else if (event.shiftKey) {
+        universe.add_pulsar(row, col);
     } else {
         universe.toggle_cell(row, col);
     }

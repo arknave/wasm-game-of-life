@@ -73,6 +73,10 @@ impl Universe {
 
 const SPACESHIP: [(u32, u32); 5] = [(0, 1), (1, 2), (2, 0), (2, 1), (2, 2)];
 
+// For the pulsar, we just hard-code one of the four quadrants
+const QUADRANTS: [(i32, i32); 4] = [(1, 1), (1, -1), (-1, 1), (-1, -1)];
+const PULSAR: [(i32, i32); 12] = [(2, 1), (3, 1), (4, 1), (1, 2), (1, 3), (1, 4), (2, 6), (3, 6), (4, 6), (6, 2), (6, 3), (6, 4)];
+
 /// Public methods, exported to JS
 #[wasm_bindgen]
 impl Universe {
@@ -181,11 +185,25 @@ impl Universe {
     }
 
     pub fn add_spaceship(&mut self, row: u32, col: u32) {
-        for (space_r, space_c) in SPACESHIP.iter().cloned() {
-            let r = (row + space_r) % self.height;
-            let c = (col + space_c) % self.width;
+        for (dr, dc) in SPACESHIP.iter().cloned() {
+            let r = (row + dr) % self.height;
+            let c = (col + dc) % self.width;
             let idx = self.get_index(r, c);
             self.cells.put(idx);
+        }
+    }
+
+    pub fn add_pulsar(&mut self, row: i32, col: i32) {
+        // I'm not proud of this :-(
+        let w = self.width as i32;
+        let h = self.height as i32;
+        for (sr, sc) in QUADRANTS.iter().cloned() {
+            for (dr, dc) in PULSAR.iter().cloned() {
+                let r = (h + row + sr * dr) % h;
+                let c = (w + col + sc * dc) % w;
+                let idx = self.get_index(r as u32, c as u32);
+                self.cells.put(idx);
+            }
         }
     }
 }
