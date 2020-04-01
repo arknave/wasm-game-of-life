@@ -94,12 +94,16 @@ canvas.addEventListener("click", event => {
     const row = clamp(Math.floor(canvasTop / (CELL_SIZE + 1)), 0, height - 1);
     const col = clamp(Math.floor(canvasLeft / (CELL_SIZE + 1)), 0, width - 1);
 
-    universe.toggle_cell(row, col);
+    if (event.metaKey) {
+        universe.add_spaceship(row, col);
+    } else {
+        universe.toggle_cell(row, col);
+    }
 
     draw();
 });
 
-// Handle game playing
+// User controls
 
 const playPauseButton = document.getElementById("play-pause");
 
@@ -140,14 +144,13 @@ resetButton.addEventListener("click", event => {
     draw();
 });
 
-let tickCount = 0;
-
-let frameSkip = 1;
 const frameSkipSlider = document.getElementById("frame-skip");
+let frameSkip = frameSkipSlider.value;
 frameSkipSlider.addEventListener("input", event => {
     frameSkip = event.target.value;
 });
 
+let tickCount = 0;
 const renderLoop = () => {
     tickCount++;
     if (tickCount >= frameSkip) {

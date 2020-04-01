@@ -71,6 +71,8 @@ impl Universe {
     }
 }
 
+const SPACESHIP: [(u32, u32); 5] = [(0, 1), (1, 2), (2, 0), (2, 1), (2, 2)];
+
 /// Public methods, exported to JS
 #[wasm_bindgen]
 impl Universe {
@@ -135,13 +137,6 @@ impl Universe {
         }
     }
 
-    pub fn init_spaceship(&mut self) {
-        for (r, c) in [(0, 1), (1, 2), (2, 0), (2, 1), (2, 2)].iter().cloned() {
-            let idx = self.get_index(r, c);
-            self.cells.put(idx);
-        }
-    }
-
     pub fn width(&self) -> u32 {
         self.width
     }
@@ -183,5 +178,14 @@ impl Universe {
     pub fn reset_cells(&mut self) {
         self.cells.grow(self.total_cells());
         self.cells.clear();
+    }
+
+    pub fn add_spaceship(&mut self, row: u32, col: u32) {
+        for (space_r, space_c) in SPACESHIP.iter().cloned() {
+            let r = (row + space_r) % self.height;
+            let c = (col + space_c) % self.width;
+            let idx = self.get_index(r, c);
+            self.cells.put(idx);
+        }
     }
 }
