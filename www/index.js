@@ -146,10 +146,20 @@ resetButton.addEventListener("click", event => {
     draw();
 });
 
-const frameSkipSlider = document.getElementById("frame-skip");
-let frameSkip = frameSkipSlider.value;
+const frameSkipSlider = document.getElementById("speed");
+
+const getFrameSkip = () => {
+    return frameSkipSlider.max - 1 - frameSkipSlider.value;
+}
+let frameSkip = getFrameSkip();
+
 frameSkipSlider.addEventListener("input", event => {
-    frameSkip = event.target.value;
+    frameSkip = getFrameSkip();
+});
+
+const helpButton = document.getElementById("help");
+helpButton.addEventListener("click", event => {
+    alert("Welcome! The grid is toroidal. Click on a cell to toggle. CMD-click to insert a glider. Shift-click to insert a pulsar.");
 });
 
 let tickCount = 0;

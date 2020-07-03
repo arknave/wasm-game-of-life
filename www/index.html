@@ -6,13 +6,18 @@
     <title>Rust WASM Game of Life</title>
   </head>
   <body>
+    <header>
+        <h1>Rust WASM Game of Life</h1>
+    </header>
     <noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
     <container class="container">
         <menu class="button-header">
-            <input id="frame-skip" type="range" min="1" max="10" value="1" />
+            <label for="speed">Speed:</label>
+            <input id="speed" type="range" min="1" max="10" value="10" />
             <button id="play-pause">Play | Pause</button>
             <button id="random-board">Random Grid</button>
             <button id="clear-board">Empty Grid</button>
+            <button id="help">Help</button>
         </menu>
         <div class="canvas-container">
             <canvas id="game-of-life-canvas"></canvas>
